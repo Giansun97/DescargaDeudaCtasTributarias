@@ -26,18 +26,18 @@ def descargar_deuda_contribuyente(driver, contribuyente: Contribuyente):
         seleccionar_cuit_contribuyente(contribuyente, driver)
 
     # Descarga excel cuentas tributarias
-    verificar_carpeta_temp(contribuyente)
+    verificar_carpeta_temp()
     descargar_excel(driver)
     mover_archivos_de_carpeta_temp_a_directorio_final(contribuyente)
 
     # Descarga excel falta de presentaciones
     cantidad_faltas_de_presentacion = click_faltas_de_presentacion(driver)
-    verificar_carpeta_temp(contribuyente)
-    faltas_de_presentacion_exist = descargar_excel_falta_presentacion(driver, contribuyente)
+    verificar_carpeta_temp()
+    faltas_de_presentacion_exist = descargar_excel_falta_presentacion(driver)
 
     if faltas_de_presentacion_exist:
         renombrar_excel_falta_presentacion(contribuyente)
-        mover_archivos_a_ubicacion_guardado(contribuyente)
+        mover_archivos_a_ubicacion_guardado()
 
     return cantidad_faltas_de_presentacion
 
@@ -69,7 +69,7 @@ def click_faltas_de_presentacion(driver):
     return cantidad_faltas_presentacion
 
 
-def descargar_excel_falta_presentacion(driver, contribuyente):
+def descargar_excel_falta_presentacion(driver):
 
     try:
         # Intentar encontrar el elemento
