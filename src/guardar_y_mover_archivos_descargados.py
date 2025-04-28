@@ -12,7 +12,6 @@ def mover_archivos_de_carpeta_temp_a_directorio_final(contribuyente):
     mover_archivos_a_ubicacion_guardado(contribuyente)
     crear_excel_desde_csv(contribuyente)
 
-
 def crear_excel_desde_csv(contribuyente):
     ubicacion_guardado = os.path.abspath(constants.UBICACION_GUARDADO)
 
@@ -21,10 +20,24 @@ def crear_excel_desde_csv(contribuyente):
         f'Estado de Deuda Cuentas Tributarias.csv'
     )
 
-    ubicacion_archivos_csv = os.path.join(ubicacion_guardado)
+    ubicacion_archivos_csv = os.path.join(ubicacion_guardado, contribuyente.id_proceso)
     ruta_archivo_csv = os.path.join(ubicacion_archivos_csv, nombre_archivo_csv)
 
+    print(ruta_archivo_csv)
+
+    # Verificar si el archivo CSV está vacío
+    if os.path.getsize(ruta_archivo_csv) == 0:
+        print(f"El archivo CSV '{nombre_archivo_csv}' está vacío. No se puede convertir a Excel.")
+        return
+
     df = pd.read_csv(ruta_archivo_csv, delimiter=',')
+
+    print(df)
+
+    # Verificar si el DataFrame está vacío
+    if df.empty:
+        print(f"El archivo CSV '{nombre_archivo_csv}' no contiene datos. No se puede convertir a Excel.")
+        return
 
     # Agregar el CUIT y el nombre del contribuyente como nuevas columnas
     df['CUIT'] = contribuyente.cuit_contribuyente
@@ -49,7 +62,6 @@ def crear_excel_desde_csv(contribuyente):
 
     ruta_archivo_excel = os.path.join(ubicacion_archivos_csv, nombre_archivo_excel)
     df.to_excel(ruta_archivo_excel, index=False)
-
 
 def verificar_carpeta_temp():
     """
