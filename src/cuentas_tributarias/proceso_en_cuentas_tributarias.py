@@ -20,6 +20,13 @@ def descargar_deuda_contribuyente(driver, contribuyente: Contribuyente):
     """
     _cambiar_pestana(driver)
 
+    # Cerrar el popup que aparece al abrir la pestaña de cuentas tributarias
+    close_button = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "close"))
+    )
+
+    close_button.click()
+
     select_element = verificar_existencia_seleccion_cliente(driver)
 
     if select_element:
@@ -28,12 +35,16 @@ def descargar_deuda_contribuyente(driver, contribuyente: Contribuyente):
     # Descarga excel cuentas tributarias
     verificar_carpeta_temp()
     descargar_excel(driver)
+    print("Se ha descargado el archivo de cuentas tributarias.")
     mover_archivos_de_carpeta_temp_a_directorio_final(contribuyente)
+    print("Se ha movido el archivo de cuentas tributarias a la carpeta de destino.")
 
     # Descarga excel falta de presentaciones
     cantidad_faltas_de_presentacion = click_faltas_de_presentacion(driver)
+    print(f"Cantidad de faltas de presentacion: {cantidad_faltas_de_presentacion}")
     verificar_carpeta_temp()
     faltas_de_presentacion_exist = descargar_excel_falta_presentacion(driver)
+    print("Se ha descargado el archivo de faltas de presentacion.")
 
     if faltas_de_presentacion_exist:
         renombrar_excel_falta_presentacion(contribuyente)
@@ -63,7 +74,7 @@ def click_faltas_de_presentacion(driver):
 
     cantidad_faltas_presentacion = falta_de_presentacion_button.get_attribute("value")
 
-    # Hacer clic en el botón de Excel
+    # # Hacer clic en el botón de Excel
     falta_de_presentacion_button.click()
 
     return cantidad_faltas_presentacion

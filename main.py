@@ -34,6 +34,7 @@ def procesar_contribuyente(contribuyente):
             ingresar_credenciales(driver, contribuyente)
             seleccionar_servicio(driver)
             cantidad_faltas_presentacion = descargar_deuda_contribuyente(driver, contribuyente)
+            print(f"Cantidad de faltas de presentacion: {cantidad_faltas_presentacion}")
             cerrar_sesion_contribuyente(driver)
 
             driver.close()
